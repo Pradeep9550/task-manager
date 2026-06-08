@@ -28,6 +28,11 @@ export const loginUser = createAsyncThunk(
     try {
       const response = await loginRequest(credentials);
 
+      localStorage.setItem(
+        "accessToken",
+        response.data.data.accessToken
+      );
+
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data);
@@ -51,16 +56,17 @@ export const getCurrentUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-
   async (_, thunkAPI) => {
     try {
       await logoutRequest();
+
+      localStorage.removeItem("accessToken");
 
       return null;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data);
     }
-  },
+  }
 );
 
 

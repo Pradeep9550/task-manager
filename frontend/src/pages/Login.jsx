@@ -7,10 +7,13 @@ import toast from "react-hot-toast";
 
 import { loginUser } from "../features/auth/authThunk";
 
+import { Eye, EyeOff } from "lucide-react";
+
 const Login = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { isAuthenticated } = useSelector((state) => state.auth);
 
@@ -60,18 +63,28 @@ const Login = () => {
             className="w-full border rounded-xl px-4 py-3"
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                password: e.target.value,
-              })
-            }
-            className="w-full border rounded-xl px-4 py-3"
-          />
+          <div className="relative">
+  <input
+    type={showPassword ? "text" : "password"}
+    placeholder="Password"
+    value={formData.password}
+    onChange={(e) =>
+      setFormData({
+        ...formData,
+        password: e.target.value,
+      })
+    }
+    className="w-full border rounded-xl px-4 py-3 pr-12"
+  />
+
+  <button
+    type="button"
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+  >
+    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+  </button>
+</div>
 
           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold">
             Login

@@ -6,11 +6,13 @@ import { useDispatch } from "react-redux";
 import toast from "react-hot-toast";
 
 import { registerUser } from "../features/auth/authThunk";
+import { Eye, EyeOff } from "lucide-react";
 
 const Register = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -19,18 +21,18 @@ const Register = () => {
   });
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const result = await dispatch(registerUser(formData));
+    const result = await dispatch(registerUser(formData));
 
-  if (registerUser.fulfilled.match(result)) {
-    toast.success(result.payload.message);
+    if (registerUser.fulfilled.match(result)) {
+      toast.success(result.payload.message);
 
-    navigate("/");
-  } else {
-    toast.error(result.payload?.message || "Registration Failed");
-  }
-};
+      navigate("/");
+    } else {
+      toast.error(result.payload?.message || "Registration Failed");
+    }
+  };
 
   return (
     <div className="min-h-screen  flex items-center justify-center p-6">
@@ -65,18 +67,28 @@ const Register = () => {
             className="w-full border rounded-xl px-4 py-3"
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                password: e.target.value,
-              })
-            }
-            className="w-full border rounded-xl px-4 py-3"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  password: e.target.value,
+                })
+              }
+              className="w-full border rounded-xl px-4 py-3 pr-12"
+            />
+
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
 
           <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold">
             Register

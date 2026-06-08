@@ -1,9 +1,22 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("accessToken");
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 let isRefreshing = false;
 let failedQueue = [];
@@ -44,13 +57,20 @@ api.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        await api.post("/auth/refresh-token");
+        const response = await api.post("/auth/refresh-token");
+
+        localStorage.setItem(
+          "accessToken",
+          response.data.data.accessToken
+        );
 
         processQueue(null);
 
         return api(originalRequest);
       } catch (err) {
         processQueue(err);
+
+        localStorage.removeItem("accessToken");
 
         return Promise.reject(err);
       } finally {
@@ -59,7 +79,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 export default api;
