@@ -83,17 +83,13 @@ export const loginUser = asyncHandler(async (req, res) => {
     "-password -refreshToken",
   );
 
-  // const options = {
-  //   httpOnly: true,
-  //   secure : true,
-  //   sameSite: "none",
-  // };
-
   const options = {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure : true,
+    sameSite: "none",
   };
+
+
 
   return res
     .status(200)
@@ -125,16 +121,12 @@ export const logoutUser = asyncHandler(async (req, res) => {
     },
   );
 
-  // const options = {
-  //   httpOnly: true,
-  //   secure : true,
-  //   sameSite: "none",
-  // };
   const options = {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure : true,
+    sameSite: "none",
   };
+ 
 
   return res
     .status(200)
@@ -174,16 +166,12 @@ export const refreshAccessToken = asyncHandler(async (req, res) => {
       user._id,
     );
 
-    // const options = {
-    //   httpOnly: true,
-    //   secure : true,
-    //   sameSite: "none",
-    // };
     const options = {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure : true,
+      sameSite: "none",
     };
+    
 
     return res
       .status(200)
